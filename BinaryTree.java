@@ -40,6 +40,7 @@ class TreeNode{
 
 public class BinaryTree {
     TreeNode root;
+    static TreeNode prev;
 
     BinaryTree(int value){
         root = new TreeNode(value);
@@ -91,18 +92,21 @@ public class BinaryTree {
     }
 
     public boolean isBinaryTree(TreeNode root){
-        if (root == null)
-            return true;
-
-        if (root.getLeft() != null && root.getValue() < root.getLeft().getValue())
-            return false;
-
-        if (root.getRight() != null && root.getValue() > root.getRight().getValue())
-            return false;
-
-        if(!isBinaryTree(root.getLeft()) || !isBinaryTree(root.getRight()))
-            return false;
         
+        //comparing current node to prev node
+        //through inorder walk
+        if (root != null) {
+            if (!isBinaryTree(root.getLeft()))
+                return false;
+
+            // Allows unique values valued nodes
+            if (prev != null && root.getValue() <= prev.getValue())
+                return false;
+
+            prev = root;
+
+            return isBinaryTree(root.getRight());
+        }
         return true;
     }
 }
